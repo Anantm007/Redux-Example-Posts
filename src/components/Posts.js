@@ -9,7 +9,15 @@ class Posts extends Component {
     {
         this.props.fetchPosts();
     }
-    
+
+    componentWillReceiveProps(nextProps)
+    {
+        if(nextProps.newPost)
+        {
+            this.props.posts.unshift(nextProps.newPost);
+        }
+    }
+
     render() {
         const postItems = this.props.posts.map(post => (
             <div key={post.id}>
@@ -29,10 +37,12 @@ class Posts extends Component {
 Posts.propTypes = {
     fetchPosts : PropTypes.func.isRequired,
     posts : PropTypes.array.isRequired,
+    newPost: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-    posts: state.posts.items // state.posts is from rootreducer
+    posts: state.posts.items, // state.posts is from rootreducer
+    newPost: state.posts.item
 })
 
 export default connect(mapStateToProps, {fetchPosts})(Posts);
